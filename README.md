@@ -1,5 +1,5 @@
 # algorithm-study
-sunday morning study group with @yoonjoo-pil
+sunday morning study group with @yoonjoo-pil and @cjttkfkd3941
 
 - 교재: 코딩인터뷰 완전분석/게일 라크만 맥도웰
 - 진행: 0.5h 이론 정리 + 1.5h 문제 풀이 + 1h 피드백
