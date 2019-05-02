@@ -1,6 +1,6 @@
 # 알고리즘 시즌 2
 '''
-- date: 2019-04-29
+- date: 2019-04-28 / 2019-05-02
 - participants: @yoonjoo-pil, @cjttkfkd3941
 - chapters: Linked List
 '''
@@ -50,6 +50,7 @@ class linkedList():
             pointer = pointer.next
         return string
     
+    # 2.1
     def elimDup(self):
         if not self.head:
             return 'no node in the linked list'
@@ -65,43 +66,50 @@ class linkedList():
             pointer = None
 
     def elimDup2(self): # without buffer
-        pass
-                
-exlink = linkedList()
-print(exlink)
-exlink.addToTail(4)
-print(exlink)
-exlink.addToTail(5)
-print(exlink)
-exlink.addToTail(6)
-print(exlink)
-exlink.deleteNode(4)
-print(exlink)
-exlink.deleteNode(6)
-print(exlink)
-exlink.deleteNode(5)
-print(exlink)
-
-'''
-no node in the linked list
-4
-4 -> 5
-4 -> 5 -> 6
-5 -> 6
-5
-no node in the linked list
-'''
-
-# 2.1 eliminate duplicates
-
-ex2link = linkedList()
-for i in [1, 2, 1, 4, 5, 1, 1, 4, 7]:
-    ex2link.addToTail(i)
-print(ex2link)
-ex2link.elimDup()
-print(ex2link)
-
-'''
-1 -> 2 -> 1 -> 4 -> 5 -> 1 -> 1 -> 4 -> 7
-1 -> 2 -> 4 -> 5 -> 7
-'''
+        if not self.head:
+            return 'no node in the linked list'
+        pointer = self.head
+        while pointer and pointer.next:
+            cursor = self.head
+            cnt = int(cursor.data == pointer.data)
+            while cursor and cursor.next:
+                if cursor.next.data == pointer.data:
+                    cnt += 1
+                    if cnt >= 2:
+                        if cursor.next.next:
+                            cursor.next = cursor.next.next
+                        else:
+                            cursor.next = None
+                cursor = cursor.next
+            pointer = pointer.next
+                       
+    # 2.2
+    def size(self):
+        return self.size
+    
+    def findNtolastelement(self, N):
+        length = self.size
+        pointer = self.head
+        idx = 0
+        if N > length:
+            return 'N larger than size'
+        if N <= 0:
+            return 'N should be larger than 0'
+        tofind = length - N
+        while tofind != idx:
+            pointer = pointer.next
+            idx += 1
+        return pointer.data
+    
+    def findNtolastelement2(self, N): # using 2 cursors
+        cursor1 = self.head
+        cursor2 = self.head
+        cnt = 1
+        while cursor2.next and cnt != N:
+            cursor2 = cursor2.next
+            cnt += 1
+        while cursor2.next:
+            cursor2 = cursor2.next
+            cursor1 = cursor1.next
+        return cursor1.data
+    
