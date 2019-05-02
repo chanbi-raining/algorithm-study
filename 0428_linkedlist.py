@@ -15,8 +15,10 @@ class Node():
 class linkedList():
     def __init__(self):
         self.head = None
+        self.size = 0
         
     def addToTail(self, end):
+        self.size += 1
         if self.head:
             pointer = self.head
             while pointer.next:
@@ -29,8 +31,10 @@ class linkedList():
         if self.head.data == nodedata:
             if self.head.next:
                 self.head = self.head.next
+                self.size -= 1
             else:
                 self.head = None
+                self.size = 0
         else:
             pointer = self.head
             while pointer.next.data != nodedata:
@@ -39,6 +43,7 @@ class linkedList():
                 else:
                     return 'no such data'
             pointer.next = pointer.next.next
+            self.size -= 1
             
     def __str__(self):
         if not self.head:
@@ -59,13 +64,12 @@ class linkedList():
         while pointer.next:
             buffer.add(pointer.data)
             if pointer.next.data in buffer:
+                self.size -= 1
                 pointer.next = pointer.next.next
             else:
                 pointer = pointer.next
-        if pointer.data in buffer:
-            pointer = None
-
-    def elimDup2(self): # without buffer
+    
+    def elimDup2(self):
         if not self.head:
             return 'no node in the linked list'
         pointer = self.head
@@ -76,13 +80,14 @@ class linkedList():
                 if cursor.next.data == pointer.data:
                     cnt += 1
                     if cnt >= 2:
+                        self.size -= 1
                         if cursor.next.next:
                             cursor.next = cursor.next.next
                         else:
                             cursor.next = None
                 cursor = cursor.next
             pointer = pointer.next
-                       
+            
     # 2.2
     def size(self):
         return self.size
