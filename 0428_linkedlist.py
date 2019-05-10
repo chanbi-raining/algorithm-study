@@ -73,18 +73,18 @@ class linkedList():
         if not self.head:
             return 'no node in the linked list'
         pointer = self.head
-        while pointer and pointer.next:
+        while pointer:
             cursor = self.head
             cnt = int(cursor.data == pointer.data)
-            while cursor and cursor.next:
+            while cursor:
                 if cursor.next.data == pointer.data:
                     cnt += 1
-                    if cnt >= 2:
-                        self.size -= 1
-                        if cursor.next.next:
-                            cursor.next = cursor.next.next
-                        else:
-                            cursor.next = None
+                if cnt >= 2:
+                    self.size -= 1
+                    if cursor.next.next:
+                        cursor.next = cursor.next.next
+                    else:
+                        cursor.next = None
                 cursor = cursor.next
             pointer = pointer.next
             
@@ -118,3 +118,22 @@ class linkedList():
             cursor1 = cursor1.next
         return cursor1.data
     
+     # 2.5
+    def add2nums(self, reverse=True):
+        lengthN = self.size // 2
+        cursor = self.head
+        summ = 0
+        for i in range(lengthN):
+            unit = i if reverse else lengthN - i - 1
+            summ += cursor.data * (10 ** unit)
+            cursor = cursor.next
+        for i in range(lengthN):
+            unit = i if reverse else lengthN - i - 1
+            summ += cursor.data * (10 ** unit)
+            cursor = cursor.next
+        new = linkedList()
+        numlst = [eval(i) for i in str(summ)]
+        iterlst = range(len(numlst) - 1, -1, -1) if reverse else range(len(numlst))
+        for num in iterlst:
+            new.addToTail(numlst[num])
+        return new
