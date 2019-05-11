@@ -118,22 +118,56 @@ class linkedList():
             cursor1 = cursor1.next
         return cursor1.data
     
-     # 2.5
-    def add2nums(self, reverse=True):
-        lengthN = self.size // 2
+     # 2.4
+    def sendfront(self, N):
+        newList = linkedList()
         cursor = self.head
-        summ = 0
-        for i in range(lengthN):
-            unit = i if reverse else lengthN - i - 1
-            summ += cursor.data * (10 ** unit)
+        while cursor:
+            newList.addToTail(cursor.data)
             cursor = cursor.next
-        for i in range(lengthN):
-            unit = i if reverse else lengthN - i - 1
-            summ += cursor.data * (10 ** unit)
+        self.head = None
+        self.size = 0
+        cursor = newList.head
+        while cursor:
+            if cursor.data < N:
+                self.addToTail(cursor.data)
+                newList.deleteNode(cursor.data)
             cursor = cursor.next
-        new = linkedList()
+        cursor = newList.head
+        while cursor:
+            self.addToTail(cursor.data)
+            cursor = cursor.next
+        return
+    
+    # 2.5 
+    def addition(self, lst): # recursively
+        summ = LinkedList._add(self.head, 0) + LinkedList._add(lst.head, 0)
+        print(summ)
+        new = LinkedList()
         numlst = [eval(i) for i in str(summ)]
-        iterlst = range(len(numlst) - 1, -1, -1) if reverse else range(len(numlst))
+        iterlst = range(len(numlst) - 1, -1, -1)
         for num in iterlst:
             new.addToTail(numlst[num])
         return new
+    
+    @staticmethod
+    def _add(cursor, pos):
+        value = 0 if not cursor else cursor.data * (10 ** (pos)) + LinkedList._add(cursor.next, pos + 1)
+        return value
+    
+    # 2.6 
+    def ispalindrome(self): # using stack
+        length = self.size
+        iteration = length // 2
+        cursor = self.head
+        stack = []
+        for idx in range(iteration):
+            stack.append(cursor.data)
+            cursor = cursor.next
+        if length % 2 == 1:
+            cursor = cursor.next
+        for idx in range(iteration):
+            if cursor.data != stack.pop():
+                return False
+            cursor = cursor.next
+        return True
