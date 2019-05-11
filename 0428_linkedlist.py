@@ -8,9 +8,15 @@
 # implementing linked list in python
 
 class Node():
-    def __init__(self, data):
+    def __init__(self, data, nnext=None):
         self.data = data
-        self.next = None
+        self.next = nnext
+        
+    def __eq__(self, other):
+        if isinstance(other, Node):
+            return (self.data == other.data) and (self.next == other.next)
+        return False
+    
 
 class linkedList():
     def __init__(self):
@@ -171,3 +177,20 @@ class linkedList():
                 return False
             cursor = cursor.next
         return True
+    
+    # 2.7
+    def same_node(self, other):
+        selfsize = self.size
+        othersize = other.size
+        if selfsize > othersize:
+            cursor1, cursor2 = self.head, other.head
+        else:
+            cursor1, cursor2 = other.head, self.head
+        for i in range(abs(selfsize - othersize)):
+            cursor1 = cursor1.next
+        for i in range(min(selfsize, othersize)):
+            if cursor1 == cursor2:
+                return cursor1.data
+            cursor1 = cursor1.next
+            cursor2 = cursor2.next
+        return 'None'
