@@ -1,6 +1,6 @@
 # 알고리즘 시즌 2
 '''
-- date: 2019-04-28 / 2019-05-02
+- date: 2019-04-28 / 2019-05-02 / 2019-05-12
 - participants: @yoonjoo-pil, @cjttkfkd3941
 - chapters: Linked List
 '''
@@ -126,23 +126,22 @@ class linkedList():
     
      # 2.4
     def sendfront(self, N):
-        newList = linkedList()
         cursor = self.head
-        while cursor:
-            newList.addToTail(cursor.data)
-            cursor = cursor.next
-        self.head = None
-        self.size = 0
-        cursor = newList.head
+        front, back = LinkedList(), LinkedList()
         while cursor:
             if cursor.data < N:
-                self.addToTail(cursor.data)
-                newList.deleteNode(cursor.data)
+                front.addToTail(cursor.data)
+                last = cursor
+            else:
+                back.addToTail(cursor.data)
             cursor = cursor.next
-        cursor = newList.head
-        while cursor:
-            self.addToTail(cursor.data)
-            cursor = cursor.next
+        pointer = front.head
+        while pointer.next:
+            pointer = pointer.next
+        pointer.next = back.head
+        self.head = front.head
+        self.next = front.head.next
+        assert self.size == front.size + back.size
         return
     
     # 2.5 
@@ -194,3 +193,15 @@ class linkedList():
             cursor1 = cursor1.next
             cursor2 = cursor2.next
         return 'None'
+    
+    # 2.8
+    def isloop(self):
+        pointer1 = self.head
+        if not self.head.next: return False
+        pointer2 = self.head.next
+        while pointer2 and pointer2.next:
+            if pointer1 == pointer2:
+                return pointer1.data
+            pointer1 = pointer1.next
+            pointer2 = pointer2.next.next
+        return False
