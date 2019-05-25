@@ -45,7 +45,7 @@ class Stack():
     def __str__(self):
         if not self.top:
             print('\tthe stack is empty')
-        return
+            return
         cursor = self.top
         string = str(cursor.data)
         cursor = cursor.next
@@ -94,39 +94,32 @@ class Queue():
 class Stack32(Stack):
     def __init__(self):
         Stack.__init__(self)
-        self.minn = None
+        self.minn = Stack()
     
     def push(self, data):
         self.size += 1
         if self.top:
             self.top = StackNode(data, self.top)
-            if self.minn.data > self.top.data:
-                self.minn = self.top
+            if self.minn.peek() > data:
+                self.minn.push(data)
         else:
             self.top = StackNode(data)
-            self.minn = self.top
+            self.minn.push(data)
     
     def pop(self):
         if self.top:
             self.size -= 1
-            if self.minn == self.top and self.size == 0:
-                self.minn = None
-            elif self.minn == self.top:
-                pointer = self.top.next
-                self.minn = self.top.next
-                while pointer:
-                    if self.minn.data > pointer.data:
-                        self.minn = pointer
-                    pointer = pointer.next
             temp = self.top.data
             self.top = self.top.next
+            if self.minn.peek() ==  temp:
+                self.minn.pop()
             return temp
         else:
             print('\tthe stack is empty')
-
+    
     def min(self):
         if self.minn:
-            return self.minn.data
+            return self.minn.peek()
         print('\tthe stack is empty')
         return
     
@@ -201,46 +194,69 @@ class MyQueue():
     def isEmpty(self):
         return self.origin.isEmpty()
     
-# 3.5
-class SmallStack():
-    def __init__(self):
-        self.min = None
-    
-    def push(self, data):
-        if not self.min:
-            self.min = StackNode(data)
-        elif self.min.data > data:
-            self.min = StackNode(data, self.min)
+
+def sortStack(example):
+    tempstack = Stack()
+    tempstack.push(example.pop())
+    while not example.isEmpty():
+        if tempstack.peek() < example.peek():
+            tempstack.push(example.pop())
         else:
-            cursor = self.min
-            while cursor.next and cursor.next.data < data:   
-                cursor = cursor.next
-            cursor.next = StackNode(data, cursor.next)
+            temp = example.pop()
+            while not tempstack.isEmpty():
+                example.push(tempstack.pop())
+            tempstack.push(temp)
+    while not tempstack.isEmpty():
+        example.push(tempstack.pop())
+    return example
     
-    def pop(self):
-        if self.min:
-            temp = self.min.data
-            self.min = self.min.next
-            return temp
-        return 'No node'
+
+class AnimalNode():
+    def __init__(self, name, order, nextt=None):
+        self.data = name
+        self.next = nextt
+        self.order = order
         
-    def peek(self):
-        if self.min:
-            return self.min
-        return 'No node'
+class AnimalQueue(Queue):
+    def __init__(self):
+        Queue.__init__(self)
+        
+    def add(self, data, order):
+        if self.first:
+            self.last.next = AnimalNode(data, order)
+            self.last = self.last.next
+        else:
+            self.first = self.last = AnimalNode(data, order)
     
-    def isEmpty(self):
-        return not bool(self.min)
+    def timestamp(self):
+        return self.first.order
+
+class AnimalShelter():
+    def __init__(self):
+        self.cats = AnimalQueue()
+        self.dogs = AnimalQueue()
+        self.order = 0
     
-    def __str__(self):
-        if not self.min:
-            print('\tthe stack is empty')
-        cursor = self.min
-        string = str(cursor.data)
-        cursor = cursor.next
-        while cursor:
-            string +=  '->' + str(cursor.data)
-            cursor = cursor.next
-        return string
+    def enqueue(self, name, species):
+        if species == 'cat':
+            self.cats.add(name, self.order)
+        else:
+            self.dogs.add(name, self.order)
+        self.order += 1
     
+    def dequeueAny(self):
+        if self.cats and self.dogs:
+            if self.cats.timestamp() > self.dogs.timestamp():
+                return self.dogs.remove()
+            return self.cats.remove()
+        if self.cats:
+            return self.cats.remove()
+        if self.dogs:
+            return self.dogs.remove()
+        return 'No animals left'
     
+    def dequeueDog(self):
+        return self.dogs.remove()
+    
+    def dequeueCat(self):
+        return self.cats.remove()
