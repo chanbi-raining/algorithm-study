@@ -55,3 +55,67 @@ if __name__ == '__main__':
     print(test41_a == True)
     print(test41_b == True)
 '''
+
+# 4.2
+class BTNode():
+    def __init__(self, value, parent=None, leftchild=None, rightchild=None):
+        self.value = value
+        self.parent = parent
+        self.leftchild = leftchild
+        self.rightchild = rightchild
+        
+    def insertValue(self, nodeval):
+        if self.value < nodeval:
+            if self.rightchild:
+                self.rightchild.insertValue(nodeval)
+            else:
+                self.rightchild = BTNode(nodeval, parent=self)
+        elif self.leftchild:
+            self.leftchild.insertValue(nodeval)
+        else:
+            self.leftchild = BTNode(nodeval, parent=self)
+
+    def insertNode(self, node):
+        if self.value < node.value:
+            if not self.rightchild:
+                self.rightchild = node
+                node.parent = self
+            else:
+                self.rightchild.insertNode(node)
+        elif not self.leftchild:
+            self.leftchild = node
+            node.parent = self
+        else:
+            self.insertNode(node)
+    
+    def createMinimalTree(self, lst):
+        if len(lst) <= 2:
+            while lst:
+                self.insertValue(lst.pop())
+        else:
+            mid = len(lst) // 2
+            subhead = BTNode(lst[mid])
+            subhead.createMinimalTree(lst[:mid])
+            subhead.createMinimalTree(lst[mid + 1:])
+            self.insertNode(subhead)
+    
+    def string(self):
+        left, right = None, None
+        if self.leftchild:
+            left = self.leftchild.string()
+        if self.rightchild:
+            right = self.rightchild.string()
+        if left == None and right == None:
+            return self.value
+        return [self.value, [left, right]]
+    
+    def __str__(self):
+        return str(self.string())
+            
+
+def make_bst(lst):
+    mid = len(lst) // 2
+    head = BTNode(lst[mid])
+    head.createMinimalTree(lst[:mid])
+    head.createMinimalTree(lst[mid + 1:])
+    return head
