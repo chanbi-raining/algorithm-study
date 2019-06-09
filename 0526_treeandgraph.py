@@ -1,6 +1,6 @@
 # 알고리즘 시즌 2
 '''
-- date: 2019-05-26
+- date: 2019-05-26, 2019-06-09
 - participants: @yoonjoo-pil, @cjttkfkd3941
 - chapters: Trees and Graphs
 '''
@@ -63,7 +63,7 @@ class BTNode():
         self.parent = parent
         self.leftchild = leftchild
         self.rightchild = rightchild
-        
+
     def insertValue(self, nodeval):
         if self.value < nodeval:
             if self.rightchild:
@@ -87,7 +87,7 @@ class BTNode():
             node.parent = self
         else:
             self.insertNode(node)
-    
+
     def createMinimalTree(self, lst):
         if len(lst) <= 2:
             while lst:
@@ -98,7 +98,7 @@ class BTNode():
             subhead.createMinimalTree(lst[:mid])
             subhead.createMinimalTree(lst[mid + 1:])
             self.insertNode(subhead)
-    
+
     def string(self):
         left, right = None, None
         if self.leftchild:
@@ -108,14 +108,76 @@ class BTNode():
         if left == None and right == None:
             return self.value
         return [self.value, [left, right]]
-    
+
     def __str__(self):
         return str(self.string())
-            
+
 
 def make_bst(lst):
     mid = len(lst) // 2
     head = BTNode(lst[mid])
     head.createMinimalTree(lst[:mid])
     head.createMinimalTree(lst[mid + 1:])
-    return head
+    return head 
+
+# 4.3
+def bfs(head):
+    from collections import deque
+    tree = deque()
+    tree.append((head, 0))
+    answer = []
+    while tree:
+        node, layer = tree.popleft()
+        if len(answer) >= layer + 1:
+            answer[layer] += [node.value]
+        else:
+            answer.append([node.value])
+        if node.leftchild: tree.append((node.leftchild, layer + 1))
+        if node.rightchild: tree.append((node.rightchild, layer + 1))
+    return answer
+
+'''
+# test code
+if __name__ == '__main__':
+    head = make_bst(list(range(1, 11)))
+    print(head)
+    print(bfs(head))
+'''
+
+# 4.4
+def hasChildren(node):
+    if node:
+        assert type(node) == BTNode
+        return bool(node.leftchild or node.rightchild)
+    return False
+
+def checkbalance(head):
+    if head.leftchild and head.rightchild:
+        return checkbalance(head.leftchild) and checkbalance(head.rightchild)
+    cursor = head.leftchild if head.leftchild else head.rightchild
+    if not hasChildren(cursor):
+        return True
+    if hasChildren(cursor.leftchild) or hasChildren(cursor.rightchild):
+        return False
+
+'''
+# test code
+if __name__ == '__main__':
+    print(checkbalance(make_bst(list(range(10)))) == True)
+    print(checkbalance(make_bst([6, 2, 3, 1, 10, 9, 20])) == False)
+'''
+
+    
+# 4.5
+def isBST(head):
+    # if head == leafnode
+    if not hasChildren(head):
+        return True
+    
+    if head.leftchild and head.rightchild:
+        if not (hasChildren(head.leftchild) and hasChildren(head.rightchild)): 
+            return bool(head.leftchild.value < head.value < head.rightchild.value) and isBST(head.leftchild) and isBST(head.rightchild)
+    if head.leftchild:
+        return bool(head.leftchild.value < head.value) and isBST(head.leftchild) 
+    if head.rightchild:
+        return bool(head.value < head.rightchild.value) and isBST(head.rightchild)
