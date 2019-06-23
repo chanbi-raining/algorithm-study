@@ -1,6 +1,6 @@
 # 알고리즘스터디 시즌 2
 '''
-- date: 2019-06-16
+- date: 2019-06-16, 2019-06-23
 - participants: @yoonjoo-pil, @cjttkfkd3941
 - chapter(s): Bit Manipulation
 '''
@@ -86,6 +86,7 @@ def change2B(a, b):
     while c != 0:
         c = c & (c - 1)
         count += 1
+        print(bin(c))
     return count
 
 '''
