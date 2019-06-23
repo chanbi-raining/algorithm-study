@@ -86,7 +86,6 @@ def change2B(a, b):
     while c != 0:
         c = c & (c - 1)
         count += 1
-        print(bin(c))
     return count
 
 '''
