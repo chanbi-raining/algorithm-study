@@ -15,6 +15,7 @@ class GraphNode():
         return str(self.value)
     
 def find_path(graph, n1, n2):
+    from collections import deque
     flag = False
     checknode = [n1, n2]
     checkdeque = [deque(), deque()]
