@@ -83,3 +83,27 @@ def rec_mul(a, b):
         mul = mul[:-1]
     return answer
 
+# 8.7
+def permute(string):
+    N = len(string)
+    if N <= 1:
+        return {string}
+    if N == 2:
+        return {string, string[1] + string[0]}
+    
+    answer = set()
+    for i in permute(string[1:]):
+        for k in range(len(i) + 1):
+            answer.add(i[0:k] + string[0] + i[k:])
+    return answer
+
+# 8.9
+def parentheses(N):
+    if N == 0: return set()
+    if N == 1: return {'()'}
+    answer, temp = set(), set()
+    for i in parentheses(N - 1):
+        answer.add('()' + i)
+        answer.add('(' + i + ')')
+        answer.add(i + '()')
+    return answer
