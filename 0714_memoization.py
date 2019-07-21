@@ -1,6 +1,6 @@
 # 알고리즘스터디 시즌 2
 '''
-- date: 2019-07-14
+- date: 2019-07-14, 2019-07-21
 - participants: @yoonjoo-pil, @cjttkfkd3941
 - chapter(s): Memoization and Dynamic Programing
 '''
@@ -17,6 +17,7 @@ def tripleStep(n):
         temp = a + b + c
         a, b, c = b, c, temp
     return temp
+
 
 # 8.2
 def gridSearch(r, c, prohibited=[]):
@@ -39,6 +40,7 @@ def gridSearch(r, c, prohibited=[]):
     path[-1] = pos
     return path
 
+
 # 8.3
 def magicidx(lst, dup=False):
     N = len(lst)
@@ -54,6 +56,7 @@ def magicidx(lst, dup=False):
             idx = lst[idx] + 1 if not dup else lst[idx]
     return False
 
+
 # 8.4
 def partial(lst):
     N = len(lst) 
@@ -65,6 +68,7 @@ def partial(lst):
         answer[idx] = set(map(lambda x: lst[x] if j[x] == '1' else None, range(N)))
         answer[idx] = set(filter(lambda x: x != None, answer[idx]))
     return answer
+
 
 # 8.5
 def rec_mul(a, b):
@@ -83,6 +87,7 @@ def rec_mul(a, b):
         mul = mul[:-1]
     return answer
 
+
 # 8.7
 def permute(string):
     N = len(string)
@@ -97,6 +102,7 @@ def permute(string):
             answer.add(i[0:k] + string[0] + i[k:])
     return answer
 
+
 # 8.9
 def parentheses(N):
     if N == 0: return set()
@@ -106,4 +112,38 @@ def parentheses(N):
         answer.add('()' + i)
         answer.add('(' + i + ')')
         answer.add(i + '()')
+    return answer
+
+
+# 8.11
+def cntcoin(n):
+    coins = [0, 1]
+    N = len(coins)
+    if n <= 1:
+        return coins[n]
+    while n >= N:
+        temp = 0
+        temp += 1 if N % 5 == 0 else 0
+        temp += 2 if N % 10 == 0 else 0
+        temp += 4 if N % 25 == 0 else 0
+        coins += [coins[-1] + temp]
+        N += 1
+    return coins[n]
+
+
+# 8.12
+def queen():
+    seeds = [(x, 0) for x in range(8)]
+    answer = []
+    for x, y in seeds:
+        queens1 = [(x, y)]
+        queens2 = [(x, y)]
+        a = x
+        while y < 8:
+            x = (x + 2) % 8
+            y += 1
+            queens1.append((x, y))
+            a = (a + 4) % 8
+            queens2.append((a, y))
+        answer.extend([queens1, queens2])
     return answer
