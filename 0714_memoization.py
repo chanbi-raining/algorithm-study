@@ -1,6 +1,6 @@
 # 알고리즘스터디 시즌 2
 '''
-- date: 2019-07-14, 2019-07-21
+- date: 2019-07-14, 2019-07-21, 2019-07-28
 - participants: @yoonjoo-pil, @cjttkfkd3941
 - chapter(s): Memoization and Dynamic Programing
 '''
@@ -88,6 +88,30 @@ def rec_mul(a, b):
     return answer
 
 
+# 8.6
+def _move(n, fro, to, via):
+    if n == 1:
+        to.append(fro.pop())
+        return [fro, via, to]
+    else:
+        _move(n - 1, fro, via, to)
+        to.append(fro.pop())
+        return _move(n - 1, via, to, fro)
+        
+def hanoi(N):
+    from collections import deque
+    cols = [deque(), deque(), deque()]
+    goals = deque()
+    for i in range(1, N + 1):
+        cols[0].appendleft(i)
+        goals.appendleft(i)
+    newcols = _move(N, cols[0], cols[2], cols[1])
+    print(len(newcols[0]), len(newcols[1]), len(newcols[2]))
+    if newcols[2] == goals:
+        return True
+    return False
+
+
 # 8.7
 def permute(string):
     N = len(string)
@@ -115,35 +139,52 @@ def parentheses(N):
     return answer
 
 
+# 8.10
+def helpaint(area, pt, color, curr):
+    a, b = pt
+    if area[a][b] == curr:
+        area[a][b] = color
+        print((a, b), end=' ')
+        if b - 1 >= 0:
+            helpaint(area, (a, b-1), color, curr)
+        if b + 1 < len(area[0]):
+            helpaint(area, (a, b + 1), color, curr)
+        if a - 1 >= 0:
+            helpaint(area, (a - 1, b), color, curr)
+        if a + 1 < len(area):
+            helpaint(area, (a + 1, b), color, curr)
+        return area
+
+def paintfill(area, pt, color):
+    a, b = pt
+    curr = area[a][b]
+    return helpaint(area, (a, b), color, curr)
+
+
 # 8.11
 def cntcoin(n):
-    coins = [0, 1]
-    N = len(coins)
-    if n <= 1:
-        return coins[n]
-    while n >= N:
-        temp = 0
-        temp += 1 if N % 5 == 0 else 0
-        temp += 2 if N % 10 == 0 else 0
-        temp += 4 if N % 25 == 0 else 0
-        coins += [coins[-1] + temp]
-        N += 1
-    return coins[n]
+    lst = [1] * (n + 1)
+    for coin in [5, 10, 25]:
+        for idx in range(n + 1):
+            lst[idx] += lst[idx - coin] if (idx - coin) >= 0 else 0
+    return lst[n]
 
 
 # 8.12
-def queen():
-    seeds = [(x, 0) for x in range(8)]
-    answer = []
-    for x, y in seeds:
-        queens1 = [(x, y)]
-        queens2 = [(x, y)]
-        a = x
-        while y < 8:
-            x = (x + 2) % 8
-            y += 1
-            queens1.append((x, y))
-            a = (a + 4) % 8
-            queens2.append((a, y))
-        answer.extend([queens1, queens2])
-    return answer
+def queen(lst):
+    # findQ's helper function
+    if len(lst) == 8:
+        print(lst)
+    a = lst[-1][0] + 1
+    nott = [x[1] for x in lst] + [sum(x) - a for x in lst] + [x[1] - x[0] + a for x in lst]
+    new = list(filter(lambda x: x not in nott, range(8)))
+    if not new:
+        return
+    for i in new:
+        queen(lst + [(a, i)])        
+        
+def findQ():
+    seeds = [(0, x) for x in range(8)]
+    for seed in seeds:
+        queen([seed])
+        
