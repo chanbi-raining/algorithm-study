@@ -158,6 +158,7 @@ def helpaint(area, pt, color, curr):
 def paintfill(area, pt, color):
     a, b = pt
     curr = area[a][b]
+    if curr == color: return area
     return helpaint(area, (a, b), color, curr)
 
 
@@ -187,4 +188,18 @@ def findQ():
     seeds = [(0, x) for x in range(8)]
     for seed in seeds:
         queen([seed])
-        
+
+
+# 8.13 - input in (w, h, d)
+def stackbox(boxes): 
+    boxes = [(x[1], x[0], x[2]) for x in boxes]
+    boxes.sort(reverse=True)
+    return helpstack(boxes)
+    
+def helpstack(boxes):
+    if not boxes: return 0
+    if len(boxes) == 1:
+        return boxes[0][0]
+    h, w, d = boxes[0][0], boxes[0][1], boxes[0][2]
+    newbox = list(filter(lambda x: x[0] < h and x[1] < w and x[2] < d, boxes[1:]))
+    return max(helpstack(boxes[1:]), h + helpstack(newbox))
