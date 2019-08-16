@@ -91,3 +91,22 @@ def findidx(listy, x):
         else:
             start = idx + 1
     return -1
+
+def rotatesearch2(lst, elem):
+    N = len(lst)
+    start, end =  0, N - 1
+    cnt = 0
+    while start < end:
+        idx = (start + end) // 2 + cnt
+        if lst[idx] == elem:
+            return idx
+        if lst[idx] > elem:
+            if lst[start] <= elem < lst[idx]:
+                end = idx - 1
+            else:
+                start = idx + 1
+        elif lst[idx] < elem <= end:
+            start = idx + 1
+        else:
+            end = idx - 1
+    return start if lst[start] == elem else -1
