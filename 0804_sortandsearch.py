@@ -1,6 +1,6 @@
 # 알고리즘스터디 시즌 2
 '''
-- date: 2019-08-04
+- date: 2019-08-04, 2019-08-17
 - participants: @yoonjoo-pil, @cjttkfkd3941
 - chapter(s): Sorting and Searching
 '''
@@ -17,11 +17,10 @@ def sortNmerge(A, B):
         if A[aid] >= B[bid]:
             A[cur] = A[aid]
             aid -= 1
-            cur -= 1
         else:
             A[cur] = B[bid]
             bid -= 1
-            cur -= 1
+        cur -= 1
             
     if bid != 0:
         for i in range(bid + 1):
@@ -30,13 +29,11 @@ def sortNmerge(A, B):
 
 
 # 10.2
-def anasort(lst):
+ def anasort(lst):
     N = len(lst)
-    newlst = []
-    for i in range(N):
-        newlst.append((''.join(sorted(lst[i])), i))
+    newlst = [(''.join(sorted(lst[i])), lst[i]) for i in range(N)]
     newlst.sort()
-    return [lst[newlst[x][1]] for x in range(N)]
+    return [newlst[x][1] for x in range(N)]
 
 
 # 10.3
@@ -60,6 +57,25 @@ def binarysearch(lst, elem):
         else:
             end = idx - 1
     return -1
+
+def rotatesearch2(lst, elem):
+    N = len(lst)
+    start, end =  0, N - 1
+    cnt = 0
+    while start < end:
+        idx = (start + end) // 2 + cnt
+        if lst[idx] == elem:
+            return idx
+        if lst[idx] > elem:
+            if lst[start] <= elem < lst[idx]:
+                end = idx - 1
+            else:
+                start = idx + 1
+        elif lst[idx] < elem <= end:
+            start = idx + 1
+        else:
+            end = idx - 1
+    return start if lst[start] == elem else -1
 
 
 # 10.4
@@ -92,21 +108,25 @@ def findidx(listy, x):
             start = idx + 1
     return -1
 
-def rotatesearch2(lst, elem):
-    N = len(lst)
-    start, end =  0, N - 1
-    cnt = 0
+
+# 10.5
+def binarystrsearch(elem, lst):
+    start, end = 0, len(lst) - 1
     while start < end:
-        idx = (start + end) // 2 + cnt
+        idx = (start + end) // 2
+        left = idx - 1
+        right = idx + 1
+        while not lst[idx]:
+            if left < start and right > end: return -1
+            if lst[left]: idx = left
+            elif lst[right]: idx = right
+            else:
+                left -= 1
+                right += 1
         if lst[idx] == elem:
             return idx
-        if lst[idx] > elem:
-            if lst[start] <= elem < lst[idx]:
-                end = idx - 1
-            else:
-                start = idx + 1
-        elif lst[idx] < elem <= end:
+        if lst[idx] < elem:
             start = idx + 1
         else:
             end = idx - 1
-    return start if lst[start] == elem else -1
+    return -1
