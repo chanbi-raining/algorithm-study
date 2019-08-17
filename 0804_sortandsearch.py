@@ -29,7 +29,7 @@ def sortNmerge(A, B):
 
 
 # 10.2
- def anasort(lst):
+def anasort(lst):
     N = len(lst)
     newlst = [(''.join(sorted(lst[i])), lst[i]) for i in range(N)]
     newlst.sort()
@@ -61,20 +61,15 @@ def binarysearch(lst, elem):
 def rotatesearch2(lst, elem):
     N = len(lst)
     start, end =  0, N - 1
-    cnt = 0
     while start < end:
-        idx = (start + end) // 2 + cnt
+        idx = (start + end) // 2
         if lst[idx] == elem:
             return idx
-        if lst[idx] > elem:
-            if lst[start] <= elem < lst[idx]:
-                end = idx - 1
-            else:
-                start = idx + 1
-        elif lst[idx] < elem <= end:
-            start = idx + 1
-        else:
+        if lst[start] <= elem < lst[idx] or elem > lst[end]:
             end = idx - 1
+            continue
+        # elem <= lst[start] or lst[idx] < elem <= lst[end]
+        start = idx + 1
     return start if lst[start] == elem else -1
 
 
@@ -118,8 +113,8 @@ def binarystrsearch(elem, lst):
         right = idx + 1
         while not lst[idx]:
             if left < start and right > end: return -1
-            if lst[left]: idx = left
-            elif lst[right]: idx = right
+            if left >= start and lst[left]: idx = left
+            elif right <= end and lst[right]: idx = right
             else:
                 left -= 1
                 right += 1
@@ -130,3 +125,4 @@ def binarystrsearch(elem, lst):
         else:
             end = idx - 1
     return -1
+
