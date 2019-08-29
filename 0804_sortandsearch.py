@@ -126,3 +126,50 @@ def binarystrsearch(elem, lst):
             end = idx - 1
     return -1
 
+
+# 10.9
+def matrix_search(mat, elem):
+    from collections import deque
+    M = len(mat)
+    N = len(mat[0])
+    
+    top, left = 0, 0
+    bottom, right = M - 1, N - 1
+    temp = deque()
+    check = set()
+    
+    while True:
+        if top <= bottom and left <= right:
+            check.add((top, bottom, left, right))
+            x, y = (top + bottom) // 2, (left + right) // 2
+            if mat[x][y] == elem:
+                return x, y
+            if mat[x][y] < elem:
+                t1 = (x + 1, bottom, left, right)
+                t2 = (top, bottom, y + 1, right)
+                if t1 not in check: temp.append(t1)
+                if t2 not in check: temp.append(t2)
+            elif mat[x][y] > elem:
+                t3 = (top, x + 1, left, right)
+                t4 = (top, bottom, left, y + 1)
+                if t3 not in check: temp.append(t3)
+                if t4 not in check: temp.append(t4)
+
+        if not temp: break
+        top, bottom, left, right = temp.pop()
+    
+    return -1
+
+
+# 10.11
+def peakvalley(lst):
+    N = len(lst)
+    i = 0
+    while i + 2 < N:
+        temp = [lst[i], lst[i + 1], lst[i + 2]]
+        if max(temp) != lst[i + 1]:
+            print(i)
+            tmp = lst.index(max(temp))
+            lst[tmp], lst[i + 1] = lst[i + 1], lst[tmp]
+        i += 2
+    return lst
