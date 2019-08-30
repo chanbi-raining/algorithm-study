@@ -1,6 +1,6 @@
 # 알고리즘스터디 시즌 2
 '''
-- date: 2019-08-04, 2019-08-17
+- date: 2019-08-04, 2019-08-17, 2019-09-01
 - participants: @yoonjoo-pil, @cjttkfkd3941
 - chapter(s): Sorting and Searching
 '''
@@ -159,6 +159,43 @@ def matrix_search(mat, elem):
         top, bottom, left, right = temp.pop()
     
     return -1
+
+
+# 10.10
+class RankNode():
+    def __init__(self, value=None):
+        self.value = value
+        self.left, self.right = None, None
+        self.cnt = 1
+        
+    def track(self, value):
+        if self.value == value:
+            self.cnt += 1
+        elif self.value > value:
+            if self.left is not None:
+                self.left.track(value)
+            else:
+                self.left = RankNode(value)
+        else:
+            if self.right:
+                self.right.track(value)
+            else:
+                self.right = RankNode(value)
+                
+    def get_number(self, value):
+        tmp = 0
+        if self is None:
+            return 0
+        if self.value <= value:
+            tmp += self.left.get_number(value) if self.left else 0 
+            tmp += self.right.get_number(value) if self.right else 0
+            return self.cnt + tmp
+        if self.left:
+            return self.left.get_number(value)
+        return 0
+    
+    def getRankOfNumber(self, value):
+        return self.get_number(value) - 1
 
 
 # 10.11
