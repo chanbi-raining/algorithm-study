@@ -34,22 +34,22 @@ print(triangle_maxsum(triangle, N))
 read = sys.stdin.readline
 
 def range_sum(a, b, c, d, square):
-    summ = 0
-    for i in range(a - 1, c):
-        for j in range(b - 1, d):
-            summ += square[i][j]
-    return summ
+    return square[c][d] - square[c][b - 1] - square[a - 1][d] + square[a - 1][b - 1]
 
-N, M = tuple(map(int, read().split()))
-square = [[0] * N for _ in range(N)]
-ans = [0] * M
-for i in range(N):
-    square[i] = list(map(int, read().split()))
-for i in range(M):
-    print(range_sum(*tuple(map(int, read().split())), square))
+N, M = map(int, read().split())
+square = [[0] * (N + 1) for _ in range(N + 1)]
+for i in range(1, N + 1):
+    tmp = 0
+    for p, num in enumerate(map(int, read().split())):
+        j = p + 1
+        tmp += num
+        square[i][j] = square[i - 1][j] + tmp
+        
+for _ in range(M):
+    print(range_sum(*map(int, read().split()), square))
     
 
-# 백준 2517번 달리기
+# 백준 2517번 달리기 (segment tree implementation required)
 
 def best_place():
     N = int(read())
