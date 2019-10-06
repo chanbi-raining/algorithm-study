@@ -14,7 +14,6 @@ from itertools import combinations
 while True:
     lst = list(map(int, read().split()))
     if len(lst) == 1: break
-    if flg == 1: print()
     k, S = lst[0], lst[1:]
     
     tmp = list(combinations(S, 6))
